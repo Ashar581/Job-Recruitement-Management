@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController extends BaseApiResponse {
@@ -25,5 +27,13 @@ public class UserController extends BaseApiResponse {
     @GetMapping("")
     public ResponseEntity viewAll(){
         return sendSuccessfulApiResponse(userService.allUsers(),"All users view.");
+    }
+    @GetMapping("{id}")
+    public ResponseEntity view(@PathVariable("id")UUID uuid){
+        return sendSuccessfulApiResponse(userService.getUser(uuid),"User viewed.");
+    }
+    @PutMapping("")
+    public ResponseEntity update(@RequestBody UserDto dto){
+        return sendSuccessfulApiResponse(userService.update(dto),"User updated.");
     }
 }

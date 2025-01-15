@@ -21,11 +21,13 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @Column(name = "JSON")
+    @Column(name = "metadata")
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String,Object> metadata;
 
     private String fileName;
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private byte [] data;
     private String fileType;
     //ManyToOne

@@ -1,6 +1,7 @@
 package com.ashar.job.recruitment.management.Dto;
 
 import com.ashar.job.recruitment.management.Entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,7 @@ public class UserDto {
     @Email
     private String email;
     private String phone;
+    @JsonIgnore
     private String password;
     private Set<String> roles;
 
@@ -40,6 +42,8 @@ public class UserDto {
 
     public static UserDto entityToDto(User entity){
         UserDto dto = new UserDto();
+
+        dto.setUuid(entity.getUuid());
         dto.setEmail(entity.getEmail());
         dto.setName(entity.getName());
         dto.setPassword(entity.getPassword());

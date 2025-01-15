@@ -81,4 +81,13 @@ public class CustomExceptionHandler {
 
         return new ResponseEntity<>(exceptionHandlerResponse,HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(FailedProcessException.class)
+    public ResponseEntity<Map<String,Object>> failedProcessExceptionHandler(FailedProcessException failedProcessException){
+        Map<String,Object> exceptionHandlerResponse = new LinkedHashMap<>();
+        exceptionHandlerResponse.put("status",false);
+        exceptionHandlerResponse.put("message",failedProcessException.getMessage());
+        exceptionHandlerResponse.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+
+        return new ResponseEntity<>(exceptionHandlerResponse,HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }

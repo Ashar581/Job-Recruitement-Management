@@ -33,7 +33,7 @@ public class DocumentDto {
     public static DocumentDto entityToDto(Document entity){
         DocumentDto dto = new DocumentDto();
         dto.setUuid(entity.getUuid());
-        dto.setData(entity.getData());
+//        dto.setData(entity.getData());
         dto.setFileType(entity.getFileType());
         dto.setFileName(entity.getFileName());
         dto.setMetadata(entity.getMetadata());

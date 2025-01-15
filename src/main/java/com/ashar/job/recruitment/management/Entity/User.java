@@ -1,5 +1,6 @@
 package com.ashar.job.recruitment.management.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -24,6 +25,7 @@ public class User {
     @Email
     private String email;
     private String phone;
+    @JsonIgnore
     private String password;
     //ManyToMany
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
