@@ -11,6 +11,7 @@ import com.ashar.job.recruitment.management.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,8 +55,10 @@ public class UserServiceImpl implements UserService{
     public List<UserDto> allUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(user -> UserDto.entityToDto(user))
-                .toList();
+                .map(user -> {
+                    return UserDto.entityToDto(user);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

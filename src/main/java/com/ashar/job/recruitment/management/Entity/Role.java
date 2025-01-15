@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,8 +23,7 @@ public class Role {
     private String roleCode;
     //ManyToOne
     @ManyToMany(mappedBy = "roles")
-    private Set<User> user;
-
+    private List<User> user;
     @PrePersist
     public void onPrePersist(){
         this.roleCode = this.roleName.toUpperCase().replaceAll("[^a-zA-Z]","");

@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(value = "DELETE FROM user_roles ur WHERE ur.user_id = :uuid", nativeQuery = true)
     void deleteUserRoleMapping(UUID uuid);
 
+    @Query(value = "Select * from users", nativeQuery = true)
+    public List<User> testFindAll();
+
 }

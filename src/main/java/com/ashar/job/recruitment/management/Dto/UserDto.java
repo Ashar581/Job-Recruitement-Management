@@ -40,7 +40,6 @@ public class UserDto {
 
     public static UserDto entityToDto(User entity){
         UserDto dto = new UserDto();
-        System.out.println(entity.getRoles());
         dto.setEmail(entity.getEmail());
         dto.setName(entity.getName());
         dto.setPassword(entity.getPassword());
