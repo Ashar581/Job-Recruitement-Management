@@ -26,6 +26,7 @@ public class Candidate {
     private String name;
     private String email;
     private String phone;
+    @Column(columnDefinition = "TEXT")
     private String summary;
     @JsonProperty("primary_skills")
     private List<String> primarySkills;

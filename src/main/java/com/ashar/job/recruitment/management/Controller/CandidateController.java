@@ -19,8 +19,8 @@ public class CandidateController extends BaseApiResponse {
     @Autowired
     private CandidateService candidateService;
     @PostMapping("apply")
-    public ResponseEntity parseDocument(@RequestParam("file") MultipartFile file){
-        return sendSuccessfulApiResponse(candidateService.apply(file),"Application in on process");
+    public ResponseEntity parseDocument(@RequestParam("file") MultipartFile file,@RequestParam("jobCode")String jobCode){
+        return sendSuccessfulApiResponse(candidateService.apply(file,jobCode),"Application in on process");
 //        return sendSuccessfulApiResponse(resumeUtilService.convertDocumentToText(file),"Your Resume was parsed successfully");
     }
 }

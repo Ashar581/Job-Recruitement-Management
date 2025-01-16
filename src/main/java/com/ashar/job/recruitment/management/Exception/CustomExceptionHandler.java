@@ -1,5 +1,6 @@
 package com.ashar.job.recruitment.management.Exception;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -89,5 +90,23 @@ public class CustomExceptionHandler {
         exceptionHandlerResponse.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
 
         return new ResponseEntity<>(exceptionHandlerResponse,HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+    @ExceptionHandler(ExpirationException.class)
+    public ResponseEntity<Map<String,Object>> expirationExceptionHandler(ExpirationException expirationException){
+        Map<String,Object> exceptionHandlerResponse = new LinkedHashMap<>();
+        exceptionHandlerResponse.put("status",false);
+        exceptionHandlerResponse.put("message", expirationException.getMessage());
+        exceptionHandlerResponse.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+
+        return new ResponseEntity<>(exceptionHandlerResponse,HttpStatus.PRECONDITION_FAILED);
+    }
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<Map<String,Object>> conflictExceptionHandler(ConflictException conflictException){
+        Map<String,Object> exceptionHandlerResponse = new LinkedHashMap<>();
+        exceptionHandlerResponse.put("status",false);
+        exceptionHandlerResponse.put("message", conflictException.getMessage());
+        exceptionHandlerResponse.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+
+        return new ResponseEntity<>(exceptionHandlerResponse,HttpStatus.CONFLICT);
     }
 }

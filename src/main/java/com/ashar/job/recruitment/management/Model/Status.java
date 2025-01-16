@@ -4,5 +4,6 @@ public enum Status {
     HOLD,
     REJECTED,
     SELECTED,
-    BLACKLISTED
+    BLACKLISTED,
+    APPLIED
 }
