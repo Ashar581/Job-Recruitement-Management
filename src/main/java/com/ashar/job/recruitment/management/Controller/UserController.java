@@ -5,7 +5,6 @@ import com.ashar.job.recruitment.management.Dto.UserDto;
 import com.ashar.job.recruitment.management.Service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
