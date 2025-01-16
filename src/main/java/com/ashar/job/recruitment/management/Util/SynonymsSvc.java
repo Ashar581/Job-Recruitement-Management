@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ public class SynonymsSvc {
     @Autowired
     private RestTemplate restTemplate;
     public List<String> getSynonyms(String word){
+        if (word==null || word.isEmpty()) return new ArrayList<>();
         try {
             List<Map<String, Object>> synonymsBody = restTemplate.exchange(dataMuseBaseUrl + word, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {}).getBody();
             return synonymsBody.stream()
