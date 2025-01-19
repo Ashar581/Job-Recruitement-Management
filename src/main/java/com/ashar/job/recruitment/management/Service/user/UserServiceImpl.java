@@ -7,8 +7,12 @@ import com.ashar.job.recruitment.management.Entity.User;
 import com.ashar.job.recruitment.management.Exception.ExistsException;
 import com.ashar.job.recruitment.management.Exception.NotFoundException;
 import com.ashar.job.recruitment.management.Exception.NullException;
+import com.ashar.job.recruitment.management.Exception.VerificationFailedException;
+import com.ashar.job.recruitment.management.Model.LoginRequest;
+import com.ashar.job.recruitment.management.Model.LoginResponse;
 import com.ashar.job.recruitment.management.Repository.RoleRepository;
 import com.ashar.job.recruitment.management.Repository.UserRepository;
+import com.ashar.job.recruitment.management.Security.JwtTokenGenerator;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService{
     private RoleRepository roleRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenGenerator tokenGenerator;
     @Override
     public UserDto create(@Valid UserDto dto) throws NullException, NotFoundException{
         if (dto.getEmail()==null) throw new NullException("Please enter email");
@@ -104,5 +110,20 @@ public class UserServiceImpl implements UserService{
             current.setRoles(updatedRole);
         }
         return UserDto.entityToDto(userRepository.save(current));
+    }
+    @Override
+    public LoginResponse authenticate(LoginRequest loginRequest) {
+        if (loginRequest.getEmail()==null || loginRequest.getPassword()==null || loginRequest.getPassword().isEmpty() || loginRequest.getEmail().isEmpty()){
+            throw new NullException("Please fill all the details.");
+        }
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(()->new NotFoundException("User does not exists."));
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
+            throw new VerificationFailedException("Invalid email/password");
+        }
+        UserDto dto = UserDto.entityToDto(user);
+        String token = tokenGenerator.generateToken(user);
+
+        return new LoginResponse(dto,token);
     }
 }

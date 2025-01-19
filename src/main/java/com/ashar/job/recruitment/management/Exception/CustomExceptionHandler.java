@@ -1,6 +1,5 @@
 package com.ashar.job.recruitment.management.Exception;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -108,5 +106,15 @@ public class CustomExceptionHandler {
         exceptionHandlerResponse.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
 
         return new ResponseEntity<>(exceptionHandlerResponse,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(VerificationFailedException.class)
+    public ResponseEntity<Map<String,Object>> tokenVerificationExceptionHandler(VerificationFailedException verificationFailedException){
+        Map<String,Object> errorResponse = new LinkedHashMap<>();
+        errorResponse.put("status", false);
+        errorResponse.put("message", verificationFailedException.getMessage());
+        errorResponse.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss")));
+
+        return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
     }
 }
