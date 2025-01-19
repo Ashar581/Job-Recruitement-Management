@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,9 @@ public class DocumentServiceImpl implements DocumentService{
 
     @Override
     public List<DocumentDto> getAll() {
-        return documentRepository.findAllDocumentWithoutBytes().orElse(new ArrayList<>());
+        return documentRepository.findAll().stream()
+                .map(doc -> DocumentDto.entityToDto(doc))
+                .toList();
     }
 
     @Override
@@ -79,8 +82,10 @@ public class DocumentServiceImpl implements DocumentService{
         if (email==null || email.isEmpty()) throw new NullException("Please enter all the required fields.");
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new NotFoundException("User not found."));
+        System.out.println(user.getDocuments().size());
         return user.getDocuments()
                 .stream()
                 .map(d -> DocumentDto.entityToDto(d)).collect(Collectors.toList());
     }
+
 }

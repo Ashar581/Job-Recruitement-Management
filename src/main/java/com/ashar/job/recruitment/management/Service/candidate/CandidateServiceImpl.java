@@ -2,6 +2,7 @@ package com.ashar.job.recruitment.management.Service.candidate;
 
 import com.ashar.job.recruitment.management.Dto.CandidateDto;
 import com.ashar.job.recruitment.management.Entity.*;
+import com.ashar.job.recruitment.management.Event.CandidateScoreEvent;
 import com.ashar.job.recruitment.management.Exception.*;
 import com.ashar.job.recruitment.management.Model.Status;
 import com.ashar.job.recruitment.management.Repository.*;
@@ -11,6 +12,7 @@ import com.ashar.job.recruitment.management.Service.resumeUtil.ResumeUtilService
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +42,8 @@ public class CandidateServiceImpl implements CandidateService{
     private JobOpeningRepository jobOpeningRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
     @Override
     @Transactional
     public boolean apply(MultipartFile file, String jobCode) throws DataConversionException, NotFoundException{
@@ -88,6 +92,9 @@ public class CandidateServiceImpl implements CandidateService{
 //        candidate.setJobOpenings(Arrays.asList(jobOpening));
         //save candidate
         candidate = candidateRepository.save(candidate);
+        //save document with the candidate
+        document.setCandidate(candidate);
+        document = documentRepository.save(document);
         //set candidate in job opening
         jobOpening.getCandidates().add(candidate);
         //save job
@@ -118,16 +125,31 @@ public class CandidateServiceImpl implements CandidateService{
         }
         //save user
         userRepository.save(user);
-
-//        System.out.println("Candidate Object:\n"+candidate);
-//        System.out.println("User Object:\n"+user);
-//        System.out.println("Document Object:\n"+document);
-
+        document.setUser(user);
+        documentRepository.save(document);
+        eventPublisher.publishEvent(new CandidateScoreEvent(candidate.getUuid(),document.getMetadata(),jobCode));
         return true;
     }
 
     @Override
-    public List<CandidateDto> getAll(String jobCode) {
-        return null;
+    public List<CandidateDto> getAll() {
+        return candidateRepository.findAll()
+                .stream()
+                .map(c -> CandidateDto.entityToDto(c))
+                .toList();
+    }
+
+    @Override
+    public CandidateDto update(CandidateDto dto) {
+        if (dto.getUuid()==null) throw new NullException("User ID cannot be empty.");
+        Candidate candidate = candidateRepository.findById(dto.getUuid())
+                .orElseThrow(()->new NotFoundException("Application was not found."));
+        if (dto.getScore()!=null){
+            candidate.setScore(dto.getScore());
+        }
+        if (dto.getStatus()!=null){
+            candidate.setStatus(dto.getStatus());
+        }
+        return CandidateDto.entityToDto(candidateRepository.save(candidate));
     }
 }

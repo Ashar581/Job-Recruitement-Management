@@ -47,7 +47,7 @@ public class Candidate {
     private Double score;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Document> documents;
 
 }

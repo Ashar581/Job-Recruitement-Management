@@ -25,7 +25,7 @@ public class JobOpening {
     private String description;
     private Date startDate;
     private Date endDate;
-    private Integer preferredExperience;
+    private Double preferredExperience;
     private List<String> requiredSkills;
     private List<String> additionalSkills;
     @ManyToMany(mappedBy = "jobOpenings")

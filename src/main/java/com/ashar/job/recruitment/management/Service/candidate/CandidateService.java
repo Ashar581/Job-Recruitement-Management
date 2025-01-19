@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CandidateService {
     boolean apply(MultipartFile file, String jobCode);
-
-    List<CandidateDto> getAll(String jobCode);
+    List<CandidateDto> getAll();
+    CandidateDto update(CandidateDto dto);
 }

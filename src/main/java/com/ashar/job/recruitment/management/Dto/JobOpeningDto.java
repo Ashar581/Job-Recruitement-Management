@@ -27,7 +27,7 @@ public class JobOpeningDto {
     private Date startDate;
     @NotNull(message = "End date cannot be empty.")
     private Date endDate;
-    private Integer preferredExperience;
+    private Double preferredExperience;
     private List<String> requiredSkills;
     private List<String> additionalSkills;
 

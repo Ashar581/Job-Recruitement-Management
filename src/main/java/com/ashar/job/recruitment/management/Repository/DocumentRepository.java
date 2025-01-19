@@ -11,5 +11,5 @@ import java.util.UUID;
 
 public interface DocumentRepository extends JpaRepository<Document, UUID> {
     @Query(value = "SELECT uuid,metadata,file_name,file_type FROM document", nativeQuery = true)
-    Optional<List<DocumentDto>> findAllDocumentWithoutBytes();
+    Optional<List<Document>> findAllDocumentWithoutBytes();
 }

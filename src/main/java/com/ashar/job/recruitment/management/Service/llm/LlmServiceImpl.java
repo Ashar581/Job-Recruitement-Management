@@ -94,7 +94,8 @@ public class LlmServiceImpl implements LlmService{
                 .findFirst()
                 .orElse(null);
         //for debugging
-        System.out.println("--CV SUMMARY--\n"+qwenReply.getLast());
+//        System.out.println("--CV SUMMARY--\n"+qwenReply.getLast());
+
         Map<String,Object> metadata = new LinkedHashMap<>();
         try{
             metadata = objectMapper.readValue(qwenReply.getLast().toString().substring(qwenReply.getLast().toString().indexOf("{"),qwenReply.getLast().toString().lastIndexOf("}")+1),Map.class);
