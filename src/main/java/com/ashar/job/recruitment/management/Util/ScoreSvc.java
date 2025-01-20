@@ -112,16 +112,26 @@ public class ScoreSvc {
         System.out.println("Total Skill Score Including Grace points = "+skillScore*100.0);
 
         //Now score for experience
-        int preferredExperienceInMonths = (int)(applied.getPreferredExperience()*12);
-        int candidateExpYears = (int) ((Map<String,Object>)metadata.get("experience")).get("years");
-        int candidateExpMonths = (int) ((Map<String,Object>)metadata.get("experience")).get("months");
-
-        double candidateExperienceInMonths = (candidateExpYears*12)+candidateExpMonths;
-        double experienceScore = (candidateExperienceInMonths/preferredExperienceInMonths)*0.8;
-        if (candidateExpMonths>preferredExperienceInMonths){
-            experienceScore+=0.2;
+        double experienceScore = 0.0;
+        int candidateExpYears = (int) ((Map<String, Object>) metadata.get("experience")).get("years");
+        int candidateExpMonths = (int) ((Map<String, Object>) metadata.get("experience")).get("months");
+        if (applied.getPreferredExperience()==0.0){
+            experienceScore = 0.8;
+            if (candidateExpMonths>0 || candidateExpYears>0){
+                experienceScore+=0.2;
+            }
+        }else {
+            int preferredExperienceInMonths = (int) (applied.getPreferredExperience() * 12);
+            if (candidateExpMonths>0 || candidateExpYears>0) {
+                double candidateExperienceInMonths = (candidateExpYears * 12) + candidateExpMonths;
+                experienceScore = (candidateExperienceInMonths / preferredExperienceInMonths) * 0.8;
+                if (candidateExpMonths > preferredExperienceInMonths) {
+                    experienceScore += 0.2;
+                }
+            }
         }
-        System.out.println("Experience Score in %: "+experienceScore*100.0);
+        System.out.println("Experience Score in %: " + experienceScore * 100.0);
+
         //Now score for project
         double projectScore = 0.0;
         int numberOfProjects = ((List<?>)metadata.get("projects")).size();
@@ -131,6 +141,7 @@ public class ScoreSvc {
         System.out.println("Project Score: "+projectScore*100.0);
 //        System.out.println("Average Points: "+((skillScore*0.60)+(experienceScore*0.25)+(projectScore*0.15))*100.0);
         double totalScore = ((skillScore*0.60)+(experienceScore*0.25)+(projectScore*0.15))*100.0;
+        System.out.println(totalScore);
         totalScore = Math.round(totalScore*100.0)/100.0;
         System.out.println("Total Score: "+totalScore);
         return totalScore;

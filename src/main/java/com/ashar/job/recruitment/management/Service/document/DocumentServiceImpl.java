@@ -88,4 +88,10 @@ public class DocumentServiceImpl implements DocumentService{
                 .map(d -> DocumentDto.entityToDto(d)).collect(Collectors.toList());
     }
 
+    @Override
+    public DocumentDto getDocumentByIdAndJobCode(UUID uuid, String jobCode) {
+        if (uuid==null || jobCode==null) throw new NullException("Please give all the details.");
+        return DocumentDto.entityToDto(documentRepository.findByCandidateIdAndJobOpeningCode(uuid,jobCode).orElseThrow(()->new NotFoundException("No document found")));
+    }
+
 }

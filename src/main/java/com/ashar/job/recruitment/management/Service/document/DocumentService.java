@@ -13,4 +13,5 @@ public interface DocumentService {
     DocumentDto delete(UUID uuid);
     List<DocumentDto> getAllUserDocuments(String email);
 
+    DocumentDto getDocumentByIdAndJobCode(UUID uuid, String jobCode);
 }

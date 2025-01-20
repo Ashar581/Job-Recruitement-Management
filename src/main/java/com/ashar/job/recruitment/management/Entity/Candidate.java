@@ -36,7 +36,7 @@ public class Candidate {
     @Embedded
     private Experience experience;
     //jobOpening ManyToMany
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "candidate_job_opening",
             joinColumns = @JoinColumn(name = "candidate_id"),

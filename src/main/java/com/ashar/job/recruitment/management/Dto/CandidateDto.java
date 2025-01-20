@@ -1,6 +1,7 @@
 package com.ashar.job.recruitment.management.Dto;
 
 import com.ashar.job.recruitment.management.Entity.Candidate;
+import com.ashar.job.recruitment.management.Entity.JobOpening;
 import com.ashar.job.recruitment.management.Model.Experience;
 import com.ashar.job.recruitment.management.Model.Project;
 import com.ashar.job.recruitment.management.Model.Status;
@@ -33,6 +34,7 @@ public class CandidateDto {
     private Date appliedOn;
     private Double score;
     private Status status;
+    private List<JobOpeningDto> jobOpeningDto;
 
     public static Candidate dtoToEntity(CandidateDto dto){
         Candidate entity = new Candidate();
@@ -67,6 +69,7 @@ public class CandidateDto {
         dto.setPrimarySkills(entity.getPrimarySkills());
         dto.setScore(entity.getScore());
         dto.setStatus(entity.getStatus());
+        dto.setJobOpeningDto(entity.getJobOpenings().stream().map(job -> JobOpeningDto.entityToDto(job)).toList());
 
         return dto;
     }

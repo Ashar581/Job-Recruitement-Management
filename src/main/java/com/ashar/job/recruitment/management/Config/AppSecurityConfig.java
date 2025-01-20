@@ -28,19 +28,19 @@ public class AppSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(config -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedMethods(Collections.singletonList("*"));
-                    configuration.setExposedHeaders(Arrays.asList("Authorization"));
+                    configuration.setAllowedHeaders(Arrays.asList("Authorization","Content-Type","Accept","Origin"));
+                    configuration.setAllowedMethods(Arrays.asList("POST","PUT","PATCH","DELETE","GET"));
                     configuration.setAllowedOrigins(Collections.singletonList("*"));
-                    configuration.setExposedHeaders(Collections.singletonList("*"));
+                    configuration.setExposedHeaders(Arrays.asList("Authorization"));
 
                     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                    source.registerCorsConfiguration("api/**",configuration);
+                    source.registerCorsConfiguration("/api/**",configuration);
 
                     return configuration;
                 }))
                 .addFilterAfter(validatorFilter, BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/sign-in","/api/users/create").permitAll()
+                        .requestMatchers("/api/auth/login","/api/users/create","/api/job/all","/api/candidate/apply").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/roles/create").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults());

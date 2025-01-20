@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController extends BaseApiResponse {
     @Autowired
     private UserService userService;
-    @PostMapping("sign-in")
+    @PostMapping("login")
     public ResponseEntity authenticate(@RequestBody LoginRequest request){
         return sendSuccessfulApiResponse(userService.authenticate(request),"User logged in successfully");
     }

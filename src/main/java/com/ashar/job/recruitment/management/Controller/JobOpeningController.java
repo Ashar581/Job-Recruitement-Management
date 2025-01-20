@@ -19,7 +19,7 @@ public class JobOpeningController extends BaseApiResponse {
     public ResponseEntity getJob(@PathVariable("code")String code){
         return sendSuccessfulApiResponse(jobOpeningService.getJobOpening(code),"Job Opening Details");
     }
-    @GetMapping("")
+    @GetMapping("/all")
     public ResponseEntity getAllJobs(){
         return sendSuccessfulApiResponse(jobOpeningService.getAllJobOpening(),"List of all job opening");
     }

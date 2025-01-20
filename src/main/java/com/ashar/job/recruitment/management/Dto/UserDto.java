@@ -25,7 +25,7 @@ public class UserDto {
     @Email
     private String email;
     private String phone;
-    @JsonIgnore
+//    @JsonIgnore
     private String password;
     private Set<String> roles;
 

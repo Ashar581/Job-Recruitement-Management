@@ -1,6 +1,5 @@
 package com.ashar.job.recruitment.management.Service.user;
 
-import com.ashar.job.recruitment.management.Dto.DocumentDto;
 import com.ashar.job.recruitment.management.Dto.UserDto;
 import com.ashar.job.recruitment.management.Entity.Role;
 import com.ashar.job.recruitment.management.Entity.User;
@@ -15,9 +14,6 @@ import com.ashar.job.recruitment.management.Repository.UserRepository;
 import com.ashar.job.recruitment.management.Security.JwtTokenGenerator;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Null;
-import org.bouncycastle.util.Strings;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -92,7 +88,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public UserDto update(UserDto dto) throws NullException, NotFoundException{
         if (dto.getUuid()==null && dto.getEmail()==null) throw new NullException("Some items were not filled.");
-        User current = new User();
+        User current;
         if (dto.getEmail()!=null) current = userRepository.findByEmail(dto.getEmail()).orElseThrow(()->new NotFoundException("User not found."));
         else current = userRepository.findById(dto.getUuid()).orElseThrow(()->new NotFoundException("User not found"));
 

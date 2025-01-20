@@ -34,4 +34,8 @@ public class DocumentController extends BaseApiResponse {
     public ResponseEntity delete(@PathVariable("uuid")UUID uuid){
         return sendSuccessfulApiResponse(documentService.delete(uuid),"Document deleted.");
     }
+    @GetMapping("candidate/{uuid}/job/{jobCode}")
+    public ResponseEntity getDocumentByCandidateIdAndJobCode(@PathVariable("uuid")UUID candidateUuid, @PathVariable("jobCode")String jobCode){
+        return sendSuccessfulApiResponse(documentService.getDocumentByIdAndJobCode(candidateUuid,jobCode),"Document viewed");
+    }
 }

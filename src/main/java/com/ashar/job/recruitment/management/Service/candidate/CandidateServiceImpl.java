@@ -11,6 +11,7 @@ import com.ashar.job.recruitment.management.Service.normalization.NormalizationS
 import com.ashar.job.recruitment.management.Service.resumeUtil.ResumeUtilService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CandidateServiceImpl implements CandidateService{
@@ -122,6 +124,13 @@ public class CandidateServiceImpl implements CandidateService{
                 user.setDocuments(new ArrayList<>());
             }
             user.getDocuments().add(document);
+            Role role = roleRepository.findByRoleCode("CANDIDATE")
+                    .orElseThrow(() -> new NotFoundException("No role was mapped. Error processing account creation."));
+            if (user.getRoles()!=null){
+                user.getRoles().add(role);
+            }else {
+                user.setRoles(Set.of(role));
+            }
         }
         //save user
         userRepository.save(user);
@@ -139,6 +148,7 @@ public class CandidateServiceImpl implements CandidateService{
                 .toList();
     }
 
+    @Transactional
     @Override
     public CandidateDto update(CandidateDto dto) {
         if (dto.getUuid()==null) throw new NullException("User ID cannot be empty.");
@@ -150,6 +160,23 @@ public class CandidateServiceImpl implements CandidateService{
         if (dto.getStatus()!=null){
             candidate.setStatus(dto.getStatus());
         }
+        Hibernate.initialize(candidate.getJobOpenings());
         return CandidateDto.entityToDto(candidateRepository.save(candidate));
+    }
+
+    @Override
+    public List<CandidateDto> getCandidateApplicants(String email) {
+        return candidateRepository.findByEmail(email)
+                .orElse(null)
+                .stream()
+                .filter(f -> f!=null)
+                .map(application -> CandidateDto.entityToDto(application))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CandidateDto viewById(UUID uuid) {
+        return CandidateDto.entityToDto(candidateRepository.findById(uuid)
+                .orElseThrow(()->new NotFoundException("Candidate now found.")));
     }
 }
