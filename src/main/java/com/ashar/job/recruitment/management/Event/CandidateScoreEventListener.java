@@ -1,6 +1,7 @@
 package com.ashar.job.recruitment.management.Event;
 
 import com.ashar.job.recruitment.management.Dto.CandidateDto;
+import com.ashar.job.recruitment.management.Model.Status;
 import com.ashar.job.recruitment.management.Service.candidate.CandidateService;
 import com.ashar.job.recruitment.management.Util.ScoreSvc;
 import jakarta.transaction.Transactional;
@@ -30,6 +31,9 @@ public class CandidateScoreEventListener {
         log.info("Event triggered for Candidate: "+candidateScoreEvent.getMetadata().get("name")+" at "+ Date.from(Instant.now())+" for score generation.");
         double totalScore = scoreSvc.scoreGenerator(candidateScoreEvent.getMetadata(),candidateScoreEvent.getJobCode());
         CandidateDto dto = new CandidateDto();
+        if (totalScore<35.0){
+            dto.setStatus(Status.REJECTED);
+        }
         dto.setUuid(candidateScoreEvent.getUuid());
         dto.setScore(totalScore);
         candidateService.update(dto);

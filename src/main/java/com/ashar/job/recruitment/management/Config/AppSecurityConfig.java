@@ -41,7 +41,8 @@ public class AppSecurityConfig {
                 .addFilterAfter(validatorFilter, BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/login","/api/users/create","/api/job/all","/api/candidate/apply").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/roles/create").hasAuthority("ADMIN")
+//                        .requestMatchers(HttpMethod.POST,"/api/roles/create").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/roles/create").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults());
 

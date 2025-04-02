@@ -133,7 +133,7 @@ public class CandidateServiceImpl implements CandidateService{
             }
         }
         //save user
-        userRepository.save(user);
+        user = userRepository.save(user);
         document.setUser(user);
         documentRepository.save(document);
         eventPublisher.publishEvent(new CandidateScoreEvent(candidate.getUuid(),document.getMetadata(),jobCode));
