@@ -7,8 +7,10 @@ import com.ashar.job.recruitment.management.Exception.*;
 import com.ashar.job.recruitment.management.Model.Status;
 import com.ashar.job.recruitment.management.Repository.*;
 import com.ashar.job.recruitment.management.Service.llm.LlmService;
+import com.ashar.job.recruitment.management.Service.mail.MailService;
 import com.ashar.job.recruitment.management.Service.normalization.NormalizationService;
 import com.ashar.job.recruitment.management.Service.resumeUtil.ResumeUtilService;
+import com.ashar.job.recruitment.management.Util.HtmlUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
@@ -46,6 +48,8 @@ public class CandidateServiceImpl implements CandidateService{
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    @Autowired
+    private MailService mailService;
     @Override
     @Transactional
     public boolean apply(MultipartFile file, String jobCode) throws DataConversionException, NotFoundException{
@@ -119,6 +123,8 @@ public class CandidateServiceImpl implements CandidateService{
             Role role = roleRepository.findByRoleCode("CANDIDATE")
                     .orElseThrow(() -> new NotFoundException("No role was mapped. Error processing account creation."));
             user.setRoles(Set.of(role));
+            //email triggering
+            mailService.sendHtmlEmail(user.getEmail(),HtmlUtil.generateUsernameAndPasswordHtml(candidateEmail,"Default@2025"));
         } else{
             if (user.getDocuments() == null) {
                 user.setDocuments(new ArrayList<>());
@@ -161,6 +167,11 @@ public class CandidateServiceImpl implements CandidateService{
             candidate.setStatus(dto.getStatus());
         }
         Hibernate.initialize(candidate.getJobOpenings());
+        Thread mailThread = new Thread(()->{
+            mailService.sendHtmlEmail(candidate.getEmail(), HtmlUtil.generateJobApplicationsHtml(candidate.getName(),candidate.getStatus().toString(),candidate.getJobOpenings().getFirst().getTitle()));
+        });
+        mailThread.setName("mail-thread");
+        mailThread.start();
         return CandidateDto.entityToDto(candidateRepository.save(candidate));
     }
 

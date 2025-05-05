@@ -113,8 +113,8 @@ public class ScoreSvc {
 
         //Now score for experience
         double experienceScore = 0.0;
-        int candidateExpYears = (int) ((Map<String, Object>) metadata.get("experience")).get("years");
-        int candidateExpMonths = (int) ((Map<String, Object>) metadata.get("experience")).get("months");
+        int candidateExpYears = (int) ((Map<String, Object>) metadata.get("experience")).getOrDefault("years",0);
+        int candidateExpMonths = (int) ((Map<String, Object>) metadata.get("experience")).getOrDefault("months",0);
         if (applied.getPreferredExperience()==0.0){
             experienceScore = 0.8;
             if (candidateExpMonths>0 || candidateExpYears>0){

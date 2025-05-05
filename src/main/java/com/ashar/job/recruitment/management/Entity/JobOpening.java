@@ -22,6 +22,7 @@ public class JobOpening {
     private UUID uuid;
     private String code;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Date startDate;
     private Date endDate;

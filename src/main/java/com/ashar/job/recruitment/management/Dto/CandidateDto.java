@@ -64,8 +64,8 @@ public class CandidateDto {
         dto.setSummary(entity.getSummary());
         dto.setAppliedOn(entity.getAppliedOn());
         dto.setProjects(entity.getProjects());
-        dto.setMonths(entity.getExperience().getMonths());
-        dto.setYears(entity.getExperience().getYears());
+        dto.setMonths(entity.getExperience()==null?0:entity.getExperience().getMonths());
+        dto.setYears(entity.getExperience()==null?0:entity.getExperience().getYears());
         dto.setPrimarySkills(entity.getPrimarySkills());
         dto.setScore(entity.getScore());
         dto.setStatus(entity.getStatus());

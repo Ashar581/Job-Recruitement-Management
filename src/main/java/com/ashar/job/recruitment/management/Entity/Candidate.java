@@ -29,6 +29,7 @@ public class Candidate {
     @Column(columnDefinition = "TEXT")
     private String summary;
     @JsonProperty("primary_skills")
+    @Column(name = "primary_skills", columnDefinition = "VARBINARY(1024)")
     private List<String> primarySkills;
     @Embedded
     @ElementCollection
