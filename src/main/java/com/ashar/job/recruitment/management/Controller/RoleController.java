@@ -14,15 +14,15 @@ public class RoleController extends BaseApiResponse {
     @Autowired
     private RoleService roleService;
     @PostMapping("create")
-    public ResponseEntity createRole(@Valid @RequestBody RoleDto dto){
+    public ResponseEntity<?> createRole(@Valid @RequestBody RoleDto dto){
         return sendSuccessfulApiResponse(roleService.create(dto),"Role added.");
     }
     @GetMapping("")
-    public ResponseEntity getAllRoles(){
+    public ResponseEntity<?> getAllRoles(){
         return sendSuccessfulApiResponse(roleService.getAllRoles(),"All Roles");
     }
     @DeleteMapping("")
-    public ResponseEntity deleteRole(@PathVariable("{roleCode}")String roleCode){
+    public ResponseEntity<?> deleteRole(@PathVariable("{roleCode}")String roleCode){
         return sendSuccessfulApiResponse(roleService.delete(roleCode),"");
     }
 }

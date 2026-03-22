@@ -16,23 +16,23 @@ public class UserController extends BaseApiResponse {
     @Autowired
     private UserService userService;
     @PostMapping("create")
-    public ResponseEntity create(@Valid @RequestBody UserDto dto){
+    public ResponseEntity<?> create(@Valid @RequestBody UserDto dto){
         return sendSuccessfulApiResponse(userService.create(dto),"User created.");
     }
     @DeleteMapping("{email}")
-    public ResponseEntity delete(@PathVariable("email")String email){
+    public ResponseEntity<?> delete(@PathVariable("email")String email){
         return sendSuccessfulApiResponse(userService.deleteUser(email),"User removed.");
     }
     @GetMapping("")
-    public ResponseEntity viewAll(){
+    public ResponseEntity<?> viewAll(){
         return sendSuccessfulApiResponse(userService.allUsers(),"All users view.");
     }
     @GetMapping("{id}")
-    public ResponseEntity view(@PathVariable("id")UUID uuid){
+    public ResponseEntity<?> view(@PathVariable("id")UUID uuid){
         return sendSuccessfulApiResponse(userService.getUser(uuid),"User viewed.");
     }
     @PutMapping("")
-    public ResponseEntity update(@RequestBody UserDto dto){
+    public ResponseEntity<?> update(@RequestBody UserDto dto){
         return sendSuccessfulApiResponse(userService.update(dto),"User updated.");
     }
 }

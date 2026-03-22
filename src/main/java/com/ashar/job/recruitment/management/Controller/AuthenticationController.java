@@ -16,7 +16,7 @@ public class AuthenticationController extends BaseApiResponse {
     @Autowired
     private UserService userService;
     @PostMapping("login")
-    public ResponseEntity authenticate(@RequestBody LoginRequest request){
+    public ResponseEntity<?> authenticate(@RequestBody LoginRequest request){
         return sendSuccessfulApiResponse(userService.authenticate(request),"User logged in successfully");
     }
 }

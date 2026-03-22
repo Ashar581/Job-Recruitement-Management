@@ -21,27 +21,27 @@ public class CandidateController extends BaseApiResponse {
     @Autowired
     private CandidateService candidateService;
     @PostMapping("apply")
-    public ResponseEntity parseDocument(@RequestParam("file") MultipartFile file,@RequestParam("jobCode")String jobCode){
+    public ResponseEntity<?> parseDocument(@RequestParam("file") MultipartFile file,@RequestParam("jobCode")String jobCode){
 //        return sendSuccessfulApiResponse(null,"Application in on process");
 
         return sendSuccessfulApiResponse(candidateService.apply(file,jobCode),"Application in on process");
     }
     @GetMapping("/all")
-    public ResponseEntity getAllCandidate(@RequestParam(value = "byJob",required = false)boolean byJob,
+    public ResponseEntity<?> getAllCandidate(@RequestParam(value = "byJob",required = false)boolean byJob,
                                           @RequestParam(value = "jobCode",required = false)String jobCode){
         return sendSuccessfulApiResponse(candidateService.getAll(),"All Candidate View.");
     }
 
     @PutMapping("")
-    public ResponseEntity updateCandidate(@RequestBody CandidateDto dto){
+    public ResponseEntity<?> updateCandidate(@RequestBody CandidateDto dto){
         return sendSuccessfulApiResponse(candidateService.update(dto),"Candidate updated");
     }
     @GetMapping("{email}")
-    public ResponseEntity getCandidateApplies(@PathVariable("email") String email){
+    public ResponseEntity<?> getCandidateApplies(@PathVariable("email") String email){
         return sendSuccessfulApiResponse(candidateService.getCandidateApplicants(email),"All applications.");
     }
     @GetMapping("{uuid}/view")
-    public ResponseEntity viewCandidateById(@PathVariable("uuid")UUID uuid){
+    public ResponseEntity<?> viewCandidateById(@PathVariable("uuid")UUID uuid){
         return sendSuccessfulApiResponse(candidateService.viewById(uuid),"Candidate View.");
     }
 }

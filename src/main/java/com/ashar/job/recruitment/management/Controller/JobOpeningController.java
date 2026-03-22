@@ -16,22 +16,22 @@ public class JobOpeningController extends BaseApiResponse {
     private JobOpeningService jobOpeningService;
 
     @GetMapping("{code}")
-    public ResponseEntity getJob(@PathVariable("code")String code){
+    public ResponseEntity<?> getJob(@PathVariable("code")String code){
         return sendSuccessfulApiResponse(jobOpeningService.getJobOpening(code),"Job Opening Details");
     }
     @GetMapping("/all")
-    public ResponseEntity getAllJobs(){
+    public ResponseEntity<?> getAllJobs(){
         return sendSuccessfulApiResponse(jobOpeningService.getAllJobOpening(),"List of all job opening");
     }
     @PostMapping("create")
-    public ResponseEntity createJobOpening(@Valid @RequestBody JobOpeningDto dto){
+    public ResponseEntity<?> createJobOpening(@Valid @RequestBody JobOpeningDto dto){
         if (jobOpeningService.createJobOpening(dto)){
             return sendSuccessfulApiResponse(true,"Job Opening was created.");
         }
         return sendFailedApiResponse("Job Opening was not created.", HttpStatus.PRECONDITION_FAILED);
     }
     @DeleteMapping("{code}")
-    public ResponseEntity deleteJobOpening(@PathVariable("code") String code){
+    public ResponseEntity<?> deleteJobOpening(@PathVariable("code") String code){
         return sendSuccessfulApiResponse(jobOpeningService.deleteJobOpening(code),"The Job Opening was removed.");
     }
 }
